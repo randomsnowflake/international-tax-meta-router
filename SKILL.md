@@ -4,11 +4,17 @@ description: Route and answer international tax/accounting questions using OpenA
 version: 1.0.0
 author: Hermes Agent
 license: MIT
+metadata:
+  hermes:
+    tags: [international-tax, accounting, openaccountants, llm-router, tax-research, cross-border-tax, vat, dividends, capital-gains, bookkeeping]
+    related_skills: [deutscher-steuerberater-meta-router, international-tax-meta-router]
 ---
 
 # International Tax Meta Router
 
 Router skill for **international tax and accounting** checks. It is designed to stay small and load only the needed OpenAccountants country context dynamically.
+
+This router repository is independent from, unaffiliated with, and not endorsed by OpenAccountants. It is only a useful LLM helper that can consume a local OpenAccountants checkout; it does not vendor or replace OpenAccountants.
 
 The router expects a local OpenAccountants checkout. By default it looks under:
 
