@@ -10,11 +10,11 @@ license: MIT
 
 Router skill for **international tax and accounting** checks. It is designed to stay small and load only the needed OpenAccountants country context dynamically.
 
-Johannes's setup currently exposes this skill in both the default profile and the law profile. The law profile installation is a symlink, not a copy, so edits remain single-sourced.
-
-The local OpenAccountants source checkout lives under:
+The router expects a local OpenAccountants checkout. By default it looks under:
 
 `~/.hermes/sources/openaccountants`
+
+Override this with `OPENACCOUNTANTS_ROOT` in the environment or in a repository-local `.env` file copied from `.env.example`.
 
 The repo has country packages under `packages/<country>/`. Do not load the whole library into context. Use the script below to select country files dynamically.
 
@@ -41,6 +41,8 @@ Do **not** use for:
 ```bash
 python3 "$HOME/.hermes/skills/finance-business/international-tax-meta-router/scripts/pack-openaccountants-context.py" "$USER_QUESTION"
 ```
+
+If your installation path differs, use the linked skill path or set `INTERNATIONAL_TAX_META_ROUTER_REPO_ROOT` / `OPENACCOUNTANTS_ROOT` in `.env`.
 
 2. Use the returned markdown context to answer. If countries were detected, compare them directly. If no country was detected and the request asks for “best countries/destinations”, the script automatically loads a broad dividend/capital-gains shortlist when possible; otherwise it returns the full country package index for narrowing.
 3. Be explicit about jurisdiction, tax year if known, residency assumptions, entity/person distinction, and whether the source package appears thin or comprehensive.
@@ -71,12 +73,19 @@ For “best destinations” questions:
 
 ## Maintenance
 
-- Implementation/maintenance notes from the original rollout live in `references/openaccountants-routing-notes.md`, including broad dividend shortlist behavior, typo/fuzzy matching expectations, profile-installation audit commands, and verification commands.
+- Implementation/maintenance notes live in `references/openaccountants-routing-notes.md`, including broad dividend shortlist behavior, typo/fuzzy matching expectations, profile-installation audit commands, and verification commands.
+- Configure local paths by copying `.env.example` to `.env` and setting `OPENACCOUNTANTS_ROOT`, install targets, and optional profile skill paths.
 - Refresh source checkout manually with:
 
 ```bash
-git -C "$HOME/.hermes/sources/openaccountants" pull --ff-only
+scripts/update-openaccountants-source.sh
+```
+
+- Install or repair links into Hermes, Claude Code, Codex, and optional `.agents` with:
+
+```bash
+scripts/install-skill-links.sh
 ```
 
 - If country detection misses common country names or abbreviations, patch `scripts/pack-openaccountants-context.py` aliases.
-- When auditing whether this skill is installed in another Hermes profile, set `HERMES_HOME=/home/clawdbot/.hermes/profiles/<profile>` for the command. Do not rely on `HERMES_PROFILE=<profile>` alone, because that can still show default-profile skills in some CLI contexts.
+- When auditing whether this skill is installed in another Hermes profile, set `HERMES_HOME=/path/to/profile/hermes-home` for the command. Do not rely on `HERMES_PROFILE=<profile>` alone, because that can still show default-profile skills in some CLI contexts.
