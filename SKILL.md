@@ -7,7 +7,7 @@ license: MIT
 metadata:
   hermes:
     tags: [international-tax, accounting, openaccountants, llm-router, tax-research, cross-border-tax, vat, dividends, capital-gains, bookkeeping]
-    related_skills: [deutscher-steuerberater-meta-router, international-tax-meta-router]
+    related_skills: [deutscher-steuerberater-meta-router]
 ---
 
 # International Tax Meta Router
