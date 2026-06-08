@@ -10,14 +10,34 @@ question itself.
 from __future__ import annotations
 
 import difflib
+import os
 import re
 import sys
 from pathlib import Path
 
-ROOT = Path.home() / ".hermes" / "sources" / "openaccountants"
+
+def load_dotenv(path: Path) -> None:
+    """Load simple KEY=VALUE lines without overriding the process environment."""
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        value = os.path.expandvars(value).replace("~", str(Path.home()), 1) if value.startswith("~") else os.path.expandvars(value)
+        os.environ.setdefault(key, value)
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+load_dotenv(REPO_ROOT / ".env")
+
+ROOT = Path(os.environ.get("OPENACCOUNTANTS_ROOT", str(Path.home() / ".hermes" / "sources" / "openaccountants"))).expanduser()
 PACKAGES = ROOT / "packages"
-MAX_TOTAL_CHARS = 90000
-MAX_FILE_CHARS = 18000
+MAX_TOTAL_CHARS = int(os.environ.get("OPENACCOUNTANTS_MAX_TOTAL_CHARS", "90000"))
+MAX_FILE_CHARS = int(os.environ.get("OPENACCOUNTANTS_MAX_FILE_CHARS", "18000"))
 
 BROAD_DIVIDEND_SHORTLIST = [
     # Common first-pass jurisdictions to inspect for dividend/capital-gains/treaty questions.

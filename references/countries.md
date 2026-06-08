@@ -1,6 +1,6 @@
 # OpenAccountants country package index
 
-Generated from `/home/clawdbot/.hermes/sources/openaccountants/packages`. Total packages: 186.
+Generated from the configured OpenAccountants `packages/` directory. Total packages: 186.
 
 - `albania`: 4 markdown files
 - `algeria`: 4 markdown files

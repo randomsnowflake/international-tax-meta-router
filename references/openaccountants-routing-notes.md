@@ -54,7 +54,7 @@ This skill currently lives in the default profile at `~/.hermes/skills/finance-b
 When checking whether another profile uses it, run Hermes with that profile's home explicitly:
 
 ```bash
-HERMES_HOME=/home/clawdbot/.hermes/profiles/law hermes skills list --enabled-only | grep -E "international-tax-meta-router|openaccountants|tax" || true
+HERMES_HOME=~/.hermes/profiles/law hermes skills list --enabled-only | grep -E "international-tax-meta-router|openaccountants|tax" || true
 ```
 
 Do not use only `HERMES_PROFILE=law` for this audit; in the June 2026 check it still surfaced default-profile finance skills and produced a misleading result. Also check direct paths:
