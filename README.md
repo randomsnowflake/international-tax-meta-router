@@ -35,10 +35,16 @@ The repository intentionally does **not** vendor OpenAccountants packages.
 - `python3`
 - a local OpenAccountants checkout, or permission for the updater to clone one
 
-Default OpenAccountants location:
+By default, the router reads OpenAccountants from:
 
 ```text
 ~/.hermes/sources/openaccountants
+```
+
+Set `OPENACCOUNTANTS_ROOT` to use a different checkout:
+
+```bash
+export OPENACCOUNTANTS_ROOT="/path/to/openaccountants"
 ```
 
 ## Configuration
@@ -52,7 +58,7 @@ $EDITOR .env
 
 Important variables:
 
-- `OPENACCOUNTANTS_ROOT` — local checkout of `openaccountants/openaccountants`.
+- `OPENACCOUNTANTS_ROOT` — **main path override** for your local `openaccountants/openaccountants` checkout. If unset, the default is `~/.hermes/sources/openaccountants`.
 - `OPENACCOUNTANTS_REPO_URL` / `OPENACCOUNTANTS_BRANCH` — source repo and branch to track.
 - `INTERNATIONAL_TAX_META_ROUTER_REPO_ROOT` — canonical local checkout of this router.
 - `HERMES_SKILL_PATH`, `CLAUDE_SKILL_PATH`, `CODEX_SKILL_PATH`, `AGENTS_SKILL_PATH` — optional install targets.
@@ -60,6 +66,14 @@ Important variables:
 - `OPENACCOUNTANTS_MAX_TOTAL_CHARS`, `OPENACCOUNTANTS_MAX_FILE_CHARS` — context caps for the packer.
 
 Environment variables override `.env` values. `.env` is ignored by git.
+
+Example one-off run with a custom OpenAccountants checkout:
+
+```bash
+OPENACCOUNTANTS_ROOT="/path/to/openaccountants" \
+  python3 scripts/pack-openaccountants-context.py \
+  "compare ETF taxation in Denmark and Norway"
+```
 
 ## Install into local agents
 
@@ -188,17 +202,6 @@ For specialist profiles, set the profile's Hermes home explicitly when needed:
 ```bash
 HERMES_HOME=~/.hermes/profiles/law hermes skills list --enabled-only | grep international-tax-meta-router
 ```
-
-## Safety and publishing checklist
-
-Before making this repository public:
-
-1. Commit only `.env.example`, never `.env`.
-2. Do not commit local absolute paths except examples using `$HOME`, `~`, or `/path/to/...`.
-3. Keep OpenAccountants content out of this repository.
-4. Review OpenAccountants licensing and attribution requirements for your own usage.
-5. Run a focused secret/path scan across the current tree and Git history.
-6. Confirm the repository description and topics make clear that this is an LLM helper/router, not tax advice and not an OpenAccountants project.
 
 ## Disclaimer
 
