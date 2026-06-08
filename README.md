@@ -6,6 +6,12 @@ It is meant for LLM-assisted research and working-paper preparation: country det
 
 > **Important:** this repository is independent from, unaffiliated with, and not endorsed by OpenAccountants. It does not contain OpenAccountants data. It is only a helper layer that can read a local OpenAccountants checkout when you have one.
 
+## Why this exists
+
+OpenAccountants is intentionally broad: it contains worldwide tax and accounting material across many jurisdictions and topics. Installing that whole knowledge base as a single LLM skill would be noisy and token-expensive. Most questions only need a few country and topic files, not the entire repository in context.
+
+This router keeps the agent-facing skill small. It detects the relevant countries and tax/accounting topics, then packs only the useful OpenAccountants files for the current question. The result is a token-efficient way for LLM agents to access worldwide tax and accounting information without bloating every conversation.
+
 ## Useful for
 
 - cross-border personal tax and accounting triage
