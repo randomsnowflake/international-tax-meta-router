@@ -27,6 +27,10 @@ git -C "$src" remote set-url origin "$url"
 before="$(git -C "$src" rev-parse HEAD 2>/dev/null || true)"
 
 git -C "$src" fetch -q origin --prune
+# Clean before checkout as well as after reset. Otherwise an untracked local
+# file that appears in the fetched branch can make checkout abort before the
+# later clean runs.
+git -C "$src" clean -q -fd
 if git -C "$src" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
   git -C "$src" checkout -q -B "$branch" "origin/$branch"
 else
