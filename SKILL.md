@@ -1,6 +1,6 @@
 ---
 name: international-tax-meta-router
-description: Route and answer international tax/accounting questions using OpenAccountants country packages. Trigger on foreign/cross-border tax, ETF/dividend/capital gains taxation, VAT/GST/MVA/MwSt, income tax, social security, payroll, e-invoicing, company formation, bookkeeping, accountant-ready working papers, or comparisons between country tax regimes. Do not use for generic non-tax law.
+description: Use for foreign or cross-border tax/accounting questions and country tax comparisons using OpenAccountants. Not for generic law or investment advice without a tax angle.
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -24,21 +24,7 @@ Override this with `OPENACCOUNTANTS_ROOT` in the environment or in a repository-
 
 The repo has country packages under `packages/<country>/`. Do not load the whole library into context. Use the script below to select country files dynamically.
 
-## Trigger gate
-
-Use for questions about:
-
-- country tax comparisons: “ETF tax in Denmark compared to Norway”
-- international dividend/capital-gains destinations
-- VAT/GST/MVA/MwSt, income tax, corporate tax, social security, payroll
-- bookkeeping, e-invoicing, company formation, accountant-ready papers
-- cross-border business or personal tax/accounting triage
-
-Do **not** use for:
-
-- general foreign law unless tax/accounting is central
-- German legal drafting/litigation/contract questions, use `deutsches-recht-meta-router`
-- investment advice without a tax/accounting angle
+German legal drafting/litigation belongs to `deutsches-recht-meta-router`; use this router when foreign or cross-border tax/accounting is central.
 
 ## Workflow
 
@@ -51,12 +37,12 @@ python3 "$HOME/.hermes/skills/finance-business/international-tax-meta-router/scr
 If your installation path differs, use the linked skill path or set `INTERNATIONAL_TAX_META_ROUTER_REPO_ROOT` / `OPENACCOUNTANTS_ROOT` in `.env`.
 
 2. Use the returned markdown context to answer. If countries were detected, compare them directly. If no country was detected and the request asks for “best countries/destinations”, the script automatically loads a broad dividend/capital-gains shortlist when possible; otherwise it returns the full country package index for narrowing.
-3. Be explicit about jurisdiction, tax year if known, residency assumptions, entity/person distinction, and whether the source package appears thin or comprehensive.
+3. Be explicit about jurisdiction, tax year if known, residency assumptions, entity/person distinction, and whether the source package appears thin or comprehensive. A `[TRUNCATED]` or `[STOPPED]` context-cap marker means partial coverage: narrow the query or retrieve the missing relevant files before claiming a complete comparison.
 4. For current rates, treaties, filing positions, or real money decisions, verify against official tax authority sources before treating the answer as operational.
 
 ## Answer style
 
-For comparison questions:
+For substantive comparisons, this is a default structure; adapt to the requested depth:
 
 1. Bottom line in 2-4 sentences
 2. Assumptions
@@ -79,19 +65,4 @@ For “best destinations” questions:
 
 ## Maintenance
 
-- Implementation/maintenance notes live in `references/openaccountants-routing-notes.md`, including broad dividend shortlist behavior, typo/fuzzy matching expectations, profile-installation audit commands, and verification commands.
-- Configure local paths by copying `.env.example` to `.env` and setting `OPENACCOUNTANTS_ROOT`, install targets, and optional profile skill paths.
-- Refresh source checkout manually with:
-
-```bash
-scripts/update-openaccountants-source.sh
-```
-
-- Install or repair links into Hermes, Claude Code, Codex, and optional `.agents` with:
-
-```bash
-scripts/install-skill-links.sh
-```
-
-- If country detection misses common country names or abbreviations, patch `scripts/pack-openaccountants-context.py` aliases.
-- When auditing whether this skill is installed in another Hermes profile, set `HERMES_HOME=/path/to/profile/hermes-home` for the command. Do not rely on `HERMES_PROFILE=<profile>` alone, because that can still show default-profile skills in some CLI contexts.
+For setup, source updates, country alias repairs and profile audits, load `references/openaccountants-routing-notes.md`.

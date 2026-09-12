@@ -82,3 +82,23 @@ PY
 ```
 
 Expected broad-mode behavior: all shortlist countries fit without `[STOPPED]`.
+
+
+## Maintenance
+
+Inspect each updater/installer's configured targets before execution. Source refresh and client/profile link repair are separate scopes: run only the requested operation, and do not enable skills or relink other clients/profiles without authorization. Preserve dirty source work; a tax question does not authorize maintenance.
+- Configure local paths by copying `.env.example` to `.env` and setting `OPENACCOUNTANTS_ROOT`, install targets, and optional profile skill paths.
+- Refresh source checkout manually with:
+
+```bash
+scripts/update-openaccountants-source.sh
+```
+
+- Install or repair links into Hermes, Claude Code, Codex, and optional `.agents` with:
+
+```bash
+scripts/install-skill-links.sh
+```
+
+- If country detection misses common country names or abbreviations, patch `scripts/pack-openaccountants-context.py` aliases.
+- When auditing whether this skill is installed in another Hermes profile, set `HERMES_HOME=/path/to/profile/hermes-home` for the command. Do not rely on `HERMES_PROFILE=<profile>` alone, because that can still show default-profile skills in some CLI contexts.
